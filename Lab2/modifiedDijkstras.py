@@ -23,6 +23,8 @@ class node:
 class dijkstras:
     def __init__(self, graph):
         self.graph = graph
+        self.reset()
+    def reset(self):
         self.reached = {}
         self.estimate = {}
         self.candidate = {}
@@ -37,6 +39,7 @@ class dijkstras:
     def modifiedAlgorithm(self, start, end):
         self.cost[start] = 0
         self.reached[start] = True
+        
         for neighbour in self.graph.vertexs[start].neighbours:
             if (self.estimate[neighbour["node"].name] > (neighbour["arrival"] - neighbour["departure"])):
                 self.estimate[neighbour["node"].name] = neighbour["arrival"] - neighbour["departure"]
@@ -61,9 +64,60 @@ class dijkstras:
             if self.reached[end]:
                 return self.cost[end]
         return None
-    
+    def printSingleOutput(self, startVertex, endingVertex):
+        self.reset()
+        result = self.modifiedAlgorithm(startVertex,endingVertex)
+        print ("Optimal route from "+str(startVertex)+" to "+str(endingVertex)+" which costs "+str(result)+" :\n")
+        current = endingVertex
+        path = []
+        while current!= startVertex:
+            previous = self.predecessor[current]["name"]
+            path.append("Fly from "+str(previous)+" to "+str(current)+".")
+            current = self.predecessor[current]["name"]
+        for i in range(len(path)):
+            print(path[len(path)-i-1])
+        if not self.predecessor[endingVertex]:
+            arrival = "0"
+        else:
+            arrival = str(self.predecessor[endingVertex]["arrival"])
+        print("\nArrive at "+str(endingVertex)+" at time "+arrival+".\n")
+    def saveAllOutputs(self):
+        events = []
+        for i in range(self.graph.maxVertex):
+            for j in range(self.graph.maxVertex):
+                events.append({"start":i,"end":j})
+        resultString = ""
+        for event in events:
+            startVertex = event["start"]
+            endingVertex = event["end"]
+            print ("To:" +str(startVertex)+" From: "+str(endingVertex))
+            self.reset()
+            self.modifiedAlgorithm(startVertex,endingVertex)
+            resultString += "Optimal Route from "+str(startVertex)+" to "+str(endingVertex)+"\n"
+            current = endingVertex
+            path = []
+            while current!= startVertex:
+                if not self.predecessor[current]:
+                    break
+                previous = self.predecessor[current]["name"]
+                path.append("Fly from "+str(previous)+" to "+str(current)+"\n")
+                current = self.predecessor[current]["name"]
+            for i in range(len(path)):
+                resultString += path[len(path)-i-1]
+            if not self.predecessor[endingVertex]:
+                arrival = "0"
+            else:
+                arrival = str(self.predecessor[endingVertex]["arrival"])
+            resultString += "Arrive at "+str(endingVertex)+" at time "+arrival+"\n\n"
+        text_file = open("TestOutput.txt", "w")
+        text_file.truncate(0)
+        text_file.write(resultString)
+        text_file.close()
+
+
+                
 if __name__ == '__main__':
-    with open("2019_Lab_2_flights_test_data.txt") as f:    
+    with open("2019_Lab_2_flights_real_data.txt") as f:    
         s = f.read()
         s = s.strip()
         s = s.splitlines()
@@ -80,17 +134,9 @@ if __name__ == '__main__':
         testGraph.vertexs[int(i[0])].addNeighbours(testGraph.vertexs[int(i[1])], int(i[2]), int(i[3]))
     #Initialize the class
     testingAlgo = dijkstras(testGraph)
-    #Get the highest cost for the test case
+    #Print Output for test case
     startVertex = 0
     endingVertex = 3
-    result = testingAlgo.modifiedAlgorithm(startVertex,endingVertex)
-    print ("Optimal route from "+str(startVertex)+" to "+str(endingVertex)+" which costs "+str(result)+" :\n")
-    current = endingVertex
-    path = []
-    while current!= startVertex:
-        previous = testingAlgo.predecessor[current]["name"]
-        path.append("Fly from "+str(previous)+" to "+str(current)+".")
-        current = testingAlgo.predecessor[current]["name"]
-    for i in range(len(path)):
-        print(path[len(path)-i-1])
-    print("\nArrive at "+str(endingVertex)+" at time "+str(testingAlgo.predecessor[endingVertex]["arrival"])+".")
+    testingAlgo.printSingleOutput(startVertex,endingVertex)
+    testingAlgo.saveAllOutputs()
+    
