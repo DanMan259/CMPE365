@@ -3,7 +3,7 @@
 """
 Created on Mon Sep 16 17:03:37 2019
 
-@author: daniyal
+@author: Daniyal Maniar
 """
 
 class graph:
