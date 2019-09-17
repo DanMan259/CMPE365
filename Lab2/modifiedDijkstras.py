@@ -39,10 +39,9 @@ class dijkstras:
     def modifiedAlgorithm(self, start, end):
         self.cost[start] = 0
         self.reached[start] = True
-        
         for neighbour in self.graph.vertexs[start].neighbours:
-            if (self.estimate[neighbour["node"].name] > (neighbour["arrival"] - neighbour["departure"])):
-                self.estimate[neighbour["node"].name] = neighbour["arrival"] - neighbour["departure"]
+            if (self.estimate[neighbour["node"].name] > (neighbour["arrival"])):
+                self.estimate[neighbour["node"].name] = neighbour["arrival"]
                 self.predecessor[neighbour["node"].name] = {"name":start, "arrival": neighbour["arrival"]}
                 self.candidate[neighbour["node"].name] = True
         for _ in range(self.graph.maxVertex):
@@ -57,8 +56,8 @@ class dijkstras:
             for neighbour in self.graph.vertexs[v].neighbours:
                 if (self.predecessor[v] and (self.predecessor[v]["arrival"] < neighbour["departure"])) or not self.predecessor[v]:
                     if (self.reached[neighbour["node"].name] == False):
-                        if ((self.cost[v] + (neighbour["arrival"] - neighbour["departure"])) < self.estimate[neighbour["node"].name]):
-                            self.estimate[neighbour["node"].name] = self.cost[v] + (neighbour["arrival"] - neighbour["departure"]) 
+                        if (neighbour["arrival"] < self.estimate[neighbour["node"].name]):
+                            self.estimate[neighbour["node"].name] = neighbour["arrival"] 
                             self.candidate[neighbour["node"].name] = True
                             self.predecessor[neighbour["node"].name] = {"name":v, "arrival": neighbour["arrival"]}
             if self.reached[end]:
@@ -71,6 +70,8 @@ class dijkstras:
         current = endingVertex
         path = []
         while current!= startVertex:
+            if not self.predecessor[current]:
+                break
             previous = self.predecessor[current]["name"]
             path.append("Fly from "+str(previous)+" to "+str(current)+".")
             current = self.predecessor[current]["name"]
@@ -109,7 +110,7 @@ class dijkstras:
             else:
                 arrival = str(self.predecessor[endingVertex]["arrival"])
             resultString += "Arrive at "+str(endingVertex)+" at time "+arrival+"\n\n"
-        text_file = open("TestOutput.txt", "w")
+        text_file = open("TestOutput2.txt", "w")
         text_file.truncate(0)
         text_file.write(resultString)
         text_file.close()
@@ -136,7 +137,7 @@ if __name__ == '__main__':
     testingAlgo = dijkstras(testGraph)
     #Print Output for test case
     startVertex = 0
-    endingVertex = 3
+    endingVertex = 2
     testingAlgo.printSingleOutput(startVertex,endingVertex)
     testingAlgo.saveAllOutputs()
     

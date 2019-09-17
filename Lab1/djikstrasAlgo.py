@@ -13,10 +13,9 @@ class graph:
         self.head = None
     def setHead(self, node):
         self.head = node
-        self.vertexs[node.name] = node
     def addNode(self, node):
         self.vertexs[node.name] = node
-        
+       
 class node:
     def __init__(self, name):
         self.name = name
