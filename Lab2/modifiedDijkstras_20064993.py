@@ -4,6 +4,8 @@
 Created on Tue Sep 17 00:39:59 2019
 
 @author: Daniyal Maniar
+
+I certify that this submission contains my own work. The modified algorithms was based upon the pseudo code provided for Lab 1:
 """
 
 class graph:
@@ -136,8 +138,8 @@ if __name__ == '__main__':
     #Initialize the class
     testingAlgo = dijkstras(testGraph)
     #Print Output for test case
-    startVertex = 0
-    endingVertex = 2
+    startVertex = 93
+    endingVertex = 49
     testingAlgo.printSingleOutput(startVertex,endingVertex)
-    testingAlgo.saveAllOutputs()
+    #testingAlgo.saveAllOutputs()
     

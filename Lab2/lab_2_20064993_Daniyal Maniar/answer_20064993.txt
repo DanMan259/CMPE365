@@ -1,0 +1,10 @@
+What is the optimal route (if any) from the city corresponding to the last two digits of your student number to the city corresponding to the third-last and fourth-last digits of your student number
+
+Student Number: 20064993
+
+Optimal route from 93 to 49 which costs 9:
+
+Fly from 93 to 124.
+Fly from 124 to 49.
+
+Arrive at 49 at time 9.
