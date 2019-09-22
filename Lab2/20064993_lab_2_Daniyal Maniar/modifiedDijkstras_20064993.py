@@ -5,28 +5,35 @@ Created on Tue Sep 17 00:39:59 2019
 
 @author: Daniyal Maniar
 
-I certify that this submission contains my own work. The modified algorithms was based upon the pseudo code provided for Lab 1:
+I certify that this submission contains my own work. 
+The modified algorithms was based upon the pseudo code provided in the definition of Lab 1.
 """
 
 class graph:
+    # This definition of a graph allows to build the network and minimize lookup to each node
     def __init__(self, maxVertex):
         self.maxVertex = maxVertex
         self.vertexs = {}
     def addNode(self, node):
+        # This function allows to add a node to network
         self.vertexs[node.name] = node
        
 class node:
+    # This definition of a node allows to set a name or number for vertex and allow for multiple connections to other nodes
     def __init__(self, name):
         self.name = name
         self.neighbours = []
     def addNeighbours(self, node, dep, arr):
+        # This adds a neighbout definition to each node. It includes a departure and arrival time
         self.neighbours.append({"node": node,"departure": dep,"arrival":arr})
         
 class dijkstras:
+
     def __init__(self, graph):
+        # This attaches a graph to the algorithm
         self.graph = graph
-        self.reset()
     def reset(self):
+        # This initializes and resets all the required data structures
         self.reached = {}
         self.estimate = {}
         self.candidate = {}
@@ -39,6 +46,9 @@ class dijkstras:
             self.cost[vertex] = float('inf')
             self.predecessor[vertex] = None
     def modifiedAlgorithm(self, start, end):
+        # This modified algorithm minimizes the time from a starting vertex to destination vertex
+        # This algorithm minimizes the arrival time
+        self.reset()
         self.cost[start] = 0
         self.reached[start] = True
         for neighbour in self.graph.vertexs[start].neighbours:
@@ -66,9 +76,10 @@ class dijkstras:
                 return self.cost[end]
         return None
     def printSingleOutput(self, startVertex, endingVertex):
-        self.reset()
-        result = self.modifiedAlgorithm(startVertex,endingVertex)
-        print ("Optimal route from "+str(startVertex)+" to "+str(endingVertex)+" which costs "+str(result)+" :\n")
+        # This prints out the minimal route from a starting to ending vertex. 
+        # It uses a predecessor structure to build a route definition.
+        self.modifiedAlgorithm(startVertex,endingVertex)
+        print ("Optimal route from "+str(startVertex)+" to "+str(endingVertex)+":\n")
         current = endingVertex
         path = []
         while current!= startVertex:
@@ -85,59 +96,29 @@ class dijkstras:
             arrival = str(self.predecessor[endingVertex]["arrival"])
         print("\nArrive at "+str(endingVertex)+" at time "+arrival+".\n")
     def saveAllOutputs(self):
-        events = []
+        # This prints out all of the combinations of starting and ending vertex
         for i in range(self.graph.maxVertex):
             for j in range(self.graph.maxVertex):
-                events.append({"start":i,"end":j})
-        resultString = ""
-        for event in events:
-            startVertex = event["start"]
-            endingVertex = event["end"]
-            print ("To:" +str(startVertex)+" From: "+str(endingVertex))
-            self.reset()
-            self.modifiedAlgorithm(startVertex,endingVertex)
-            resultString += "Optimal Route from "+str(startVertex)+" to "+str(endingVertex)+"\n"
-            current = endingVertex
-            path = []
-            while current!= startVertex:
-                if not self.predecessor[current]:
-                    break
-                previous = self.predecessor[current]["name"]
-                path.append("Fly from "+str(previous)+" to "+str(current)+"\n")
-                current = self.predecessor[current]["name"]
-            for i in range(len(path)):
-                resultString += path[len(path)-i-1]
-            if not self.predecessor[endingVertex]:
-                arrival = "0"
-            else:
-                arrival = str(self.predecessor[endingVertex]["arrival"])
-            resultString += "Arrive at "+str(endingVertex)+" at time "+arrival+"\n\n"
-        text_file = open("TestOutput2.txt", "w")
-        text_file.truncate(0)
-        text_file.write(resultString)
-        text_file.close()
+                self.printSingleOutput(i,j)
 
-
-                
 if __name__ == '__main__':
+    # Open the file and read the data
     with open("2019_Lab_2_flights_real_data.txt") as f:    
         s = f.read()
         s = s.strip()
         s = s.splitlines()
-    #set the first line to be the size of graph
-    testGraph = graph(int(s[0]))
-    #remove the first line
-    vertexs = int(s.pop(0))
-    #Add all the nodes to the graph
-    for i in range(vertexs):
+    # Set the first line to be the size of graph and remove it from the array
+    testGraph = graph(int(s.pop(0)))
+    # Add all the nodes to the graph
+    for i in range(testGraph.maxVertex):
         testGraph.addNode(node(i))
-    #Add all the neighbours for each node
+    # Add all the neighbours for each node
     for i in s:
         i = i.split()
         testGraph.vertexs[int(i[0])].addNeighbours(testGraph.vertexs[int(i[1])], int(i[2]), int(i[3]))
-    #Initialize the class
+    # Initialize the class
     testingAlgo = dijkstras(testGraph)
-    #Print Output for test case
+    # Print Output for test case
     startVertex = 93
     endingVertex = 49
     testingAlgo.printSingleOutput(startVertex,endingVertex)

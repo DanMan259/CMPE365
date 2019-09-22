@@ -2,7 +2,7 @@ What is the optimal route (if any) from the city corresponding to the last two d
 
 Student Number: 20064993
 
-Optimal route from 93 to 49 which costs 9:
+Optimal route from 93 to 49:
 
 Fly from 93 to 124.
 Fly from 124 to 49.
