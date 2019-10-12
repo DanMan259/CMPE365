@@ -145,4 +145,4 @@ if __name__ == '__main__':
         plt.title('Subset Sum algorithm analysis') 
         plt.show()
     except:
-        print("You don't have matplotlib installed to get complete output")
+        print("You don't have matplotlib installed in order to get complete output")
