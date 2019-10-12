@@ -9,14 +9,12 @@ I certify that this submission contains my own work.
 The algorithms were based upon the pseudo code provided in the definition of the Lab.
 
 This file reflects the same algorithms but they are modified to count operations instead of results. 
-This will require matplotlib to be installed
+This in order to get the complete output matplotlib will be required to be installed
 
 """
 
 import random
 import math
-# Change this line to zero if you dont have matplotlib to plot the results
-PLOT = 1
 
 def createSet_OBJ(array):
     return {"set": array[:], "sum": sum(array)}
@@ -134,7 +132,7 @@ if __name__ == '__main__':
         hsSetAverages.append(hsNAverage/n)
     
     # This section plots the results
-    if PLOT:
+    try:
         import matplotlib.pyplot as plt
         x_axis = list(range(4, 16)) 
         plt.plot(x_axis, bfiSetAverages, label="BFI")
@@ -146,3 +144,5 @@ if __name__ == '__main__':
         plt.ylabel('Number of Operations') 
         plt.title('Subset Sum algorithm analysis') 
         plt.show()
+    except:
+        pass
