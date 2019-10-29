@@ -11,16 +11,22 @@ The algorithms were based upon the pseudo code provided in the definition of the
 This file has the solution in a non-modified format
 """
 
-import collections
 import heapq
 
 class HuffMan:
-    def __init__(self, txt):
+    def __init__(self, filePath):
+        txt = self.readFile(filePath)
         self.genMappings(txt)
-    def genMappings(self, txt):
-        symbolFreq = collections.defaultdict(int)
-        for char in txt:
+    def generateFreqDict(self, text):
+        symbolFreq = {}
+        symbolFreq[chr(10)] = 0
+        for asciiCode in range(32, 127):
+            symbolFreq[chr(asciiCode)] = 0            
+        for char in text:
             symbolFreq[char] += 1
+        return symbolFreq
+    def genMappings(self, text):
+        symbolFreq = self.generateFreqDict(text)
         heap = [[symbolFreq[key], [[key, ""]]] for key in symbolFreq]
         heapq.heapify(heap)
         while len(heap) > 1:
@@ -34,28 +40,32 @@ class HuffMan:
         completedMap = heapq.heappop(heap)[1]
         self.mappings = {charPair[0]:charPair[1] for charPair in completedMap}
         self.reverseMappings = {charPair[1]:charPair[0] for charPair in completedMap}
-    def encode(self, txt):
+    def encode(self, text):
         encodedStr = []
-        for char in txt:
+        for char in text:
             encodedStr.append(self.mappings[char])
         return ''.join(encodedStr)
-    def decode(self, encodedTxt):
-        decodedTxt = []
+    def decode(self, encodedText):
+        decodedText = []
         encodedChar = ""
-        for bit in encodedTxt:
+        for bit in encodedText:
             encodedChar += bit
             if encodedChar in self.reverseMappings:
-                decodedTxt.append(self.reverseMappings[encodedChar])
+                decodedText.append(self.reverseMappings[encodedChar])
                 encodedChar = ""
-        return ''.join(decodedTxt)
-
+        return ''.join(decodedText)
+    def readFile(self, filePath):
+        file = open(filePath, "r")
+        return file.read()
+    def writeFile(self, text, filePath):
+        file = open(filePath, "w")
+        file.write(text)
+        file.close()       
 
 if __name__ == '__main__':
-    txt = "I love to test!"
-    huffman = HuffMan(txt)
-    encodedTxt = huffman.encode(txt)
-    decodedTxt = huffman.decode(encodedTxt)
-    print("Original: " + txt)
-    print("Encoded Text: " + encodedTxt)
-    print("Decoded Text: " + decodedTxt)
-    print ("Is the decoded same as the original: "+str(txt == decodedTxt))
+    pathToFiles = './Part1/'
+    FileToGenMappings = "File1"
+    FileToEncode = 'File2'
+    huffMan = HuffMan(pathToFiles + FileToGenMappings + ".txt")
+    huffMan.writeFile(huffMan.encode(huffMan.readFile(pathToFiles + FileToEncode + ".txt")), pathToFiles + FileToEncode + "Encoded.txt")
+    huffMan.writeFile(huffMan.decode(huffMan.readFile(pathToFiles + FileToEncode + "Encoded.txt")), pathToFiles + FileToEncode +"Decoded.txt")
