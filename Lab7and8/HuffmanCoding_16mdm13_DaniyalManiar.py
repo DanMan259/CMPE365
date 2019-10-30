@@ -80,6 +80,11 @@ if __name__ == '__main__':
     huffMan = HuffMan(pathToFiles + FileToGenMappings + ".txt")
     huffMan.writeFile(huffMan.encode(huffMan.readFile(pathToFiles + FileToEncode + ".txt")), pathToFiles + FileToEncode + "Encoded.txt")
     huffMan.writeFile(huffMan.decode(huffMan.readFile(pathToFiles + FileToEncode + "Encoded.txt")), pathToFiles + FileToEncode +"Decoded.txt")
+    open(pathToFiles+'Part1Mappings.txt', "w").close()
+    file = open(pathToFiles+'Part1Mappings.txt', "a")
+    for key in huffMan.mappings:
+        file.write(key+'\t'+huffMan.mappings[key]+'\n')
+    file.close() 
     # Part 2
     pathToFiles = "./Part2/"
     FilesToEncode = ['Data/Earth','Data/Mystery','Data/Myths','Data/Simak','Data/Wodehouse']
