@@ -12,6 +12,7 @@ This file has the solution in a non-modified format
 """
 # Import the required packages
 import heapq
+import math
 import os
 
 class HuffMan:
@@ -82,8 +83,9 @@ if __name__ == '__main__':
     huffMan.writeFile(huffMan.decode(huffMan.readFile(pathToFiles + FileToEncode + "Encoded.txt")), pathToFiles + FileToEncode +"Decoded.txt")
     open(pathToFiles+'Part1Mappings.txt', "w").close()
     file = open(pathToFiles+'Part1Mappings.txt', "a")
+    file.write('ASCII Code\tHuffman Code\n')
     for key in huffMan.mappings:
-        file.write(key+'\t'+huffMan.mappings[key]+'\n')
+        file.write(str(ord(key))+'\t\t\t'+huffMan.mappings[key]+'\n')
     file.close() 
     # Part 2
     pathToFiles = "./Part2/"
@@ -95,6 +97,14 @@ if __name__ == '__main__':
         for file in FilesToEncode:
             encodedTxt = huffMan.encode(huffMan.readFile(pathToFiles + file + ".txt"))
             results[num-1] += len(encodedTxt)
+            if (math.ceil(len(encodedTxt)/8) > os.path.getsize(pathToFiles + file + ".txt")):
+                keyWord = 'larger'
+            elif (math.ceil(len(encodedTxt)/8) < os.path.getsize(pathToFiles + file + ".txt")):
+                keyWord = 'smaller'
+            else:
+                keyWord = 'same'
             huffMan.writeFile(encodedTxt, pathToFiles + file + str(num) + "Encoded.txt")
             huffMan.writeFile(huffMan.decode(huffMan.readFile(pathToFiles + file + str(num) + "Encoded.txt")), pathToFiles + file + str(num) + "Decoded.txt")
+            print (DirToGenMappings[:-1]+" creates a "+keyWord+' sized '+file[5:]+".txt encoded file.")
+            print ("Encoded: "+str(math.ceil(len(encodedTxt)/8))+' bytes Original: '+str(os.path.getsize(pathToFiles + file + ".txt"))+" bytes.")
     print("The best Canonical Collection to encode the files with is "+str(results.index(min(results))+1))
