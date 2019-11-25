@@ -1,0 +1,13 @@
+The algorithm I used for this assignment is a combination of LCS, and hashing.
+First the user types in the files they want to compare, those files are read 
+and split into array of lines. Each line is then hashed using python's built in
+hashing function, the result of the hashing is stored. The hashing function in 
+python is very efficient has a low collision rate. 
+
+The hashing and the lines are passed into a modified LCS algorithm. 
+The algorithm builds 2 "matches list" for each file as it computes.
+After it builds the matches it uses those arrays to print matches 
+and mismatches. 
+
+All in all this algorithm is very efficient as it uses dynamic programming to
+reduce the amount of computations and minimize the mismatches within two files.
